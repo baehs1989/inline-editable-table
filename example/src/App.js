@@ -4,6 +4,14 @@ import ExampleComponent from 'inline-editable-table'
 
 export default class App extends Component {
 
+  onSave(newData, updatedRow){
+    console.log(newData, updatedRow)
+  }
+
+  onCancel(row){
+    console.log(row)
+  }
+
 
   render () {
 
@@ -22,22 +30,36 @@ export default class App extends Component {
           {
             name: 'Zerya Betül',
             surname: 'Baran',
-            birthYear: 2017,
-            birthCity: 34,
+            birthYear: '2017',
+            birthCity: '34',
           },
+          {
+            name: 'Zerya Betül',
+            surname: 'Baran',
+            birthYear: '2017',
+            birthCity: '34',
+          },
+          {
+            name: 'Zerya Betül',
+            surname: 'Baran',
+            birthYear: '2017',
+            birthCity: '34',
+          }
       ],
       options:{
-        editable:{start:0, end: 4}
+        editable:{start:0, end: 10}
       }
     }
 
     return (
-      <div>
+      <div style={{boxSizing:'border-box', padding: 25}}>
         <ExampleComponent
             content={content}
-            onValueChange={()=>console.log("onValueChange")}
-            onCancel={()=>console.log("onCancel")}
-            onValueSave={()=>console.log("onValueSave")}
+            onCancel={this.onCancel}
+            onSave={this.onSave}
+            style={{
+
+            }}
         />
       </div>
     )

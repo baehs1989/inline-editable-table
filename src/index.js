@@ -1,36 +1,45 @@
-// import React, { Component } from 'react'
-// import PropTypes from 'prop-types'
-
-// import styles from './styles.css'
-
-// export default class EditableTable extends Component {
-//   static propTypes = {
-//     text: PropTypes.string
-//   }
-
-//   render() {
-//     const {
-//       text
-//     } = this.props
-
-//     return (
-//       <div className={styles.test}>
-//         Example Component: {text}
-//       </div>
-//     )
-//   }
-// }
-
 import React, { Component } from 'react'
-import Row from './Container/Row/Row';
+import Row from './Component/Row/Row';
+import classes from './Table.module.css';
 
 export default class EditableTable extends Component {
     state = {
         index:true,
+        data:JSON.parse(JSON.stringify(this.props.content.data)),
+        previousData:JSON.parse(JSON.stringify(this.props.content.data)),
+        options:this.props.content.options?this.props.content.options:{}
     }
 
     onEditingIndexChange = (index) => {
         this.setState({index:index});
+    }
+
+    onSave = (row) => {
+      if (this.props.onSave){
+        this.props.onSave(this.state.data, row)
+      }
+
+      let newData = JSON.parse(JSON.stringify([...this.state.data]));
+      this.setState({previousData:newData})      
+
+
+    }
+
+    onCancel = (row) => {
+      if (this.props.onCancel){
+        this.props.onCancel(row)
+      }
+      let newData = JSON.parse(JSON.stringify([...this.state.previousData]));
+      this.setState({data:newData})
+    }
+
+    onValueChange = (value, row, column) => {
+      let newData = [...this.state.data];
+      newData[row][column] = value;
+      this.setState({
+        data : newData
+      })
+
     }
     
 
@@ -42,24 +51,26 @@ export default class EditableTable extends Component {
             return <th key={header.field}>{header.title}</th>
         })
 
-        var rows = this.props.content.data.map((row,index) => {
+        var rows = this.state.data.map((row,index) => {
             return <Row 
                         key={index} 
                         index={index} 
                         header={headerOrder} 
+                        onValueChange={this.onValueChange}
 
-                        onCancel={this.props.onCancel?this.props.onCancel:null} 
-                        onValueChange={this.props.onValueChange?this.props.onValueChange:null}
-                        onValueSave={this.props.onValueSave?this.props.onValueSave:null}
+                        onCancel={this.onCancel} 
+                        onSave={this.onSave}
+                        
 
-                        editable={this.props.content.options.editable} 
+                        editable={this.state.options.editable?this.state.options.editable:{start:0, end:headers.length}} 
                         onEditingIndexChange={this.onEditingIndexChange}
                         editing={((index === this.state.index) || (this.state.index === true))}
                         data={row}/>
         })
 
         return (
-            <table className="editable-table" width="100%" style={{...this.props.style}}>
+          <div className={classes.OuterDiv}>
+            <table className={classes.Table}>
                 <thead>
                     <tr>
                         {headers}
@@ -69,7 +80,9 @@ export default class EditableTable extends Component {
                 <tbody>
                     {rows}
                 </tbody>
-            </table>                
+            </table>  
+          </div>
+              
                                 
         )
 
