@@ -60,6 +60,8 @@ export default class EditableTable extends Component {
 
                         onCancel={this.onCancel} 
                         onSave={this.onSave}
+
+                        outerDiv={classes.OuterDiv}
                         
 
                         editable={this.state.options.editable?this.state.options.editable:{start:0, end:headers.length}} 

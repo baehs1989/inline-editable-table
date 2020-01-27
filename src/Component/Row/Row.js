@@ -13,6 +13,8 @@ class Row extends React.Component {
     handleEditButton = () => {
         this.setState({editing:true})
         this.props.onEditingIndexChange(this.props.index)
+
+        document.querySelector('.'+this.props.outerDiv).scrollLeft=0;
     }
 
     handleSaveButton = (row) =>{
@@ -20,6 +22,7 @@ class Row extends React.Component {
         this.props.onSave(row)
         this.props.onEditingIndexChange(true)
 
+        document.querySelector('.'+this.props.outerDiv).scrollLeft=0;
     }
 
     handleCancelButton = (row) =>{
@@ -30,6 +33,8 @@ class Row extends React.Component {
         this.setState({editing:false})
 
         this.props.onEditingIndexChange(true)
+
+        document.querySelector('.'+this.props.outerDiv).scrollLeft=0;
 
 
     }
