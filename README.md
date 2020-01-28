@@ -68,7 +68,6 @@ class Example extends Component {
             content={content}
             onCancel={this.onCancel}
             onSave={this.onSave}
-            style={{
       />
     )
   }
